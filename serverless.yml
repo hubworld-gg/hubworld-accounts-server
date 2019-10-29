@@ -1,0 +1,28 @@
+service: hubworld-accounts-server
+app: hubworld-accounts-server
+org: lmuller18
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    port: 4001
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules: false
+    packager: 'yarn'
+
+functions:
+  accounts:
+    handler: handler.handler
+    events:
+      - http:
+          path: api
+          method: post
+          cors: true
