@@ -5,6 +5,10 @@ org: lmuller18
 provider:
   name: aws
   runtime: nodejs10.x
+  package:
+    individually: true
+    exclude:
+      - node_modules
 
 plugins:
   - serverless-webpack
@@ -15,12 +19,12 @@ custom:
     port: 4001
   webpack:
     webpackConfig: 'webpack.config.js'
-    includeModules: false
+    includeModules: true
     packager: 'yarn'
 
 functions:
   accounts:
-    handler: handler.handler
+    handler: src/handler.handler
     events:
       - http:
           path: api
