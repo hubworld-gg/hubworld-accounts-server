@@ -1,30 +1,7 @@
 import { APIGatewayProxyEvent, Context, Callback } from 'aws-lambda';
-import { ApolloServer, gql } from 'apollo-server-lambda';
+import { ApolloServer } from 'apollo-server-lambda';
 import { buildFederatedSchema } from '@apollo/federation';
-
-export interface AppUserContext {
-  username: string;
-  email: string;
-}
-
-export interface AppGraphQLEvent extends APIGatewayProxyEvent {
-  user: AppUserContext;
-}
-
-export interface AppGraphQLContext {
-  user: AppUserContext;
-}
-
-const typeDefs = gql`
-  extend type Query {
-    me: User
-  }
-  type User @key(fields: "id") {
-    id: ID!
-    name: String
-    username: String
-  }
-`;
+import typeDefs from './schema.graphql';
 
 const resolvers = {
   Query: {
@@ -47,16 +24,9 @@ const server = new ApolloServer({
     }
   ]),
   debug: process.env.APP_ENV === 'prod' ? false : true,
-  context: ({
-    event,
-    context
-  }: {
-    event: AppGraphQLEvent;
-    context: AppGraphQLContext;
-  }): AppGraphQLContext => {
-    return {
-      user: event.user
-    };
+  context: ({ event }) => {
+    const userID = event.headers ? event.headers['user-id'] : undefined;
+    return { userID };
   }
 });
 
@@ -64,14 +34,17 @@ const users = [
   {
     id: '1',
     name: 'Ada Lovelace',
-    birthDate: '1815-12-10',
-    username: '@ada'
-  },
-  {
-    id: '2',
-    name: 'Alan Turing',
-    birthDate: '1912-06-23',
-    username: '@complete'
+    username: '@ada',
+    about: {
+      description: 'This is a decription',
+      socialAccounts: [
+        {
+          type: 'TWITCH',
+          url: 'http://twitch.tv',
+          name: 'My Twitch Channel'
+        }
+      ]
+    }
   }
 ];
 

@@ -19,7 +19,17 @@ module.exports = {
   module: {
     rules: [
       { test: /\.ts(x?)$/, loader: 'ts-loader' },
-      { test: /\.graphql|gql?$/, loader: 'webpack-graphql-loader' }
+      {
+        test: /\.graphql?$/,
+        use: [
+          {
+            loader: 'webpack-graphql-loader',
+            options: {
+              output: 'document'
+            }
+          }
+        ]
+      }
     ]
   },
   output: {

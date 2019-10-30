@@ -1,0 +1,34 @@
+extend type Query {
+  me: User
+}
+type User @key(fields: "id") {
+  id: ID!
+  name: String
+  username: String
+  about: About
+}
+
+type About {
+  description: String
+  socialAccounts: [SocialLink]
+}
+
+enum LinkType {
+  TWITCH
+  MIXER
+  DISCORD
+  YOUTUBE
+  FACEBOOK
+  STEAM
+  ORIGIN
+  UPLAY
+  BATTLENET
+  RIOT
+  PLAIN
+}
+
+type SocialLink {
+  type: LinkType
+  url: String
+  name: String
+}
