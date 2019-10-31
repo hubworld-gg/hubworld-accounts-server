@@ -3,10 +3,14 @@ import { ApolloServer } from 'apollo-server-lambda';
 import { buildFederatedSchema } from '@apollo/federation';
 import typeDefs from './schema.graphql';
 
+export interface AppGraphQLContext {
+  userID: String;
+}
+
 const resolvers = {
   Query: {
-    me() {
-      return users[0];
+    me(_: any, __: any, context: AppGraphQLContext) {
+      return users.find(u => u.id === context.userID);
     }
   },
   User: {
@@ -24,7 +28,7 @@ const server = new ApolloServer({
     }
   ]),
   debug: process.env.APP_ENV === 'prod' ? false : true,
-  context: ({ event }) => {
+  context: ({ event }): AppGraphQLContext => {
     const userID = event.headers ? event.headers['user-id'] : undefined;
     return { userID };
   }
@@ -32,7 +36,7 @@ const server = new ApolloServer({
 
 const users = [
   {
-    id: '1',
+    id: 'test-user',
     name: 'Ada Lovelace',
     username: '@ada',
     about: {
