@@ -9,7 +9,7 @@ export interface AppGraphQLContext {
 
 const resolvers = {
   Query: {
-    me(_: any, __: any, context: AppGraphQLContext) {
+    me(_root: any, _args: any, context: AppGraphQLContext) {
       return users.find(u => u.id === context.userID);
     }
   },
@@ -49,6 +49,21 @@ const users = [
         }
       ]
     }
+  },
+  {
+    id: 'comanderguy',
+    name: 'Liam Muller',
+    username: 'comanderguy',
+    about: {
+      description: 'This is a decription',
+      socialAccounts: [
+        {
+          type: 'TWITCH',
+          url: 'http://twitch.tv',
+          name: 'My Twitch Channel'
+        }
+      ]
+    }
   }
 ];
 
@@ -62,7 +77,7 @@ export const handler = (
       origin: process.env.CORS_ORIGIN,
       credentials: true
     }
-  })(event, context, (err: any, data: any) => {
+  })(event, context, (_err: any, data: any) => {
     callback(null, data);
   });
 };
