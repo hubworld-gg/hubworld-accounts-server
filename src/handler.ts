@@ -1,21 +1,23 @@
 import { APIGatewayProxyEvent, Context, Callback } from 'aws-lambda';
 import { ApolloServer } from 'apollo-server-lambda';
 import { buildFederatedSchema } from '@apollo/federation';
+
+import { Resolvers, LinkType } from './schemaTypes';
 import typeDefs from './schema.graphql';
 
-export interface AppGraphQLContext {
+interface AppGraphQLContext {
   userID: String;
 }
 
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
-    me(_root: any, _args: any, context: AppGraphQLContext) {
-      return users.find(u => u.id === context.userID);
+    me(root, args, context: AppGraphQLContext) {
+      return users.find(u => u.id === context.userID) || null;
     }
   },
   User: {
     __resolveReference(object: any) {
-      return users.find(user => user.id === object.id);
+      return users.find(user => user.id === object.id) || null;
     }
   }
 };
@@ -43,7 +45,7 @@ const users = [
       description: 'This is a decription',
       socialAccounts: [
         {
-          type: 'TWITCH',
+          type: LinkType.Twitch,
           url: 'http://twitch.tv',
           name: 'My Twitch Channel'
         }
@@ -58,7 +60,7 @@ const users = [
       description: 'This is a decription',
       socialAccounts: [
         {
-          type: 'TWITCH',
+          type: LinkType.Twitch,
           url: 'http://twitch.tv',
           name: 'My Twitch Channel'
         }
