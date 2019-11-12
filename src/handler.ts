@@ -31,7 +31,7 @@ const server = new ApolloServer({
   ]),
   debug: process.env.APP_ENV === 'prod' ? false : true,
   context: ({ event }): AppGraphQLContext => {
-    const userID = event.headers ? event.headers['user-id'] : undefined;
+    const userID = event.headers?.['user-id'];
     return { userID };
   }
 });
