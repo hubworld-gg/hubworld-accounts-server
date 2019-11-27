@@ -17,8 +17,8 @@ export type Scalars = {
 
 export type About = {
    __typename?: 'About',
-  description?: Maybe<Scalars['String']>,
-  socialAccounts?: Maybe<Array<Maybe<SocialLink>>>,
+  description: Scalars['String'],
+  socialAccounts: Array<SocialLink>,
 };
 
 export enum LinkType {
@@ -42,17 +42,17 @@ export type Query = {
 
 export type SocialLink = {
    __typename?: 'SocialLink',
-  type?: Maybe<LinkType>,
-  url?: Maybe<Scalars['String']>,
-  name?: Maybe<Scalars['String']>,
+  type: LinkType,
+  url: Scalars['String'],
+  name: Scalars['String'],
 };
 
 export type User = {
    __typename?: 'User',
   id: Scalars['ID'],
-  name?: Maybe<Scalars['String']>,
-  username?: Maybe<Scalars['String']>,
-  about?: Maybe<About>,
+  name: Scalars['String'],
+  username: Scalars['String'],
+  about: About,
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -161,20 +161,20 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   __resolveReference?: ReferenceResolver<Maybe<ResolversTypes['User']>, { __typename: 'User' } & Pick<ParentType, 'id'>, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  about?: Resolver<Maybe<ResolversTypes['About']>, ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  about?: Resolver<ResolversTypes['About'], ParentType, ContextType>,
 }>;
 
 export type AboutResolvers<ContextType = any, ParentType extends ResolversParentTypes['About'] = ResolversParentTypes['About']> = ResolversObject<{
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  socialAccounts?: Resolver<Maybe<Array<Maybe<ResolversTypes['SocialLink']>>>, ParentType, ContextType>,
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  socialAccounts?: Resolver<Array<ResolversTypes['SocialLink']>, ParentType, ContextType>,
 }>;
 
 export type SocialLinkResolvers<ContextType = any, ParentType extends ResolversParentTypes['SocialLink'] = ResolversParentTypes['SocialLink']> = ResolversObject<{
-  type?: Resolver<Maybe<ResolversTypes['LinkType']>, ParentType, ContextType>,
-  url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  type?: Resolver<ResolversTypes['LinkType'], ParentType, ContextType>,
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{

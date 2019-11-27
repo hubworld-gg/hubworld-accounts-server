@@ -3,14 +3,14 @@ extend type Query {
 }
 type User @key(fields: "id") {
   id: ID!
-  name: String
-  username: String
-  about: About
+  name: String!
+  username: String!
+  about: About!
 }
 
 type About {
-  description: String
-  socialAccounts: [SocialLink]
+  description: String!
+  socialAccounts: [SocialLink!]!
 }
 
 enum LinkType {
@@ -28,7 +28,7 @@ enum LinkType {
 }
 
 type SocialLink {
-  type: LinkType
-  url: String
-  name: String
+  type: LinkType!
+  url: String!
+  name: String!
 }
