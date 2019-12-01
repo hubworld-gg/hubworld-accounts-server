@@ -1,26 +1,10 @@
+import AWS from 'aws-sdk';
 import { APIGatewayProxyEvent, Context, Callback } from 'aws-lambda';
 import { ApolloServer } from 'apollo-server-lambda';
 import { buildFederatedSchema } from '@apollo/federation';
 
-import { Resolvers, LinkType } from './schemaTypes';
-import typeDefs from './schema.graphql';
-
-interface AppGraphQLContext {
-  userID: String;
-}
-
-const resolvers: Resolvers = {
-  Query: {
-    me(root, args, context: AppGraphQLContext) {
-      return users.find(u => u.id === context.userID) || null;
-    }
-  },
-  User: {
-    __resolveReference(object: any) {
-      return users.find(user => user.id === object.id) || null;
-    }
-  }
-};
+import resolvers from 'resolvers';
+import typeDefs from 'schema.graphql';
 
 const server = new ApolloServer({
   schema: buildFederatedSchema([
@@ -32,42 +16,10 @@ const server = new ApolloServer({
   debug: process.env.APP_ENV === 'prod' ? false : true,
   context: ({ event }): AppGraphQLContext => {
     const userID = event.headers?.['user-id'];
-    return { userID };
+    const docClient = new AWS.DynamoDB.DocumentClient();
+    return { userID, docClient };
   }
 });
-
-const users = [
-  {
-    id: 'test-user',
-    name: 'Ada Lovelace',
-    username: '@ada',
-    about: {
-      description: 'This is a decription',
-      socialAccounts: [
-        {
-          type: LinkType.Twitch,
-          url: 'http://twitch.tv',
-          name: 'My Twitch Channel'
-        }
-      ]
-    }
-  },
-  {
-    id: 'comanderguy',
-    name: 'Liam Muller',
-    username: 'comanderguy',
-    about: {
-      description: 'This is a decription',
-      socialAccounts: [
-        {
-          type: LinkType.Twitch,
-          url: 'http://twitch.tv',
-          name: 'My Twitch Channel'
-        }
-      ]
-    }
-  }
-];
 
 export const handler = (
   event: APIGatewayProxyEvent,

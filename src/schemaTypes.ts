@@ -1,5 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 export type Maybe<T> = T | null;
+export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string,
@@ -38,6 +39,12 @@ export enum LinkType {
 export type Query = {
    __typename?: 'Query',
   me?: Maybe<User>,
+  userById?: Maybe<User>,
+};
+
+
+export type QueryUserByIdArgs = {
+  id: Scalars['ID']
 };
 
 export type SocialLink = {
@@ -50,7 +57,7 @@ export type SocialLink = {
 export type User = {
    __typename?: 'User',
   id: Scalars['ID'],
-  name: Scalars['String'],
+  displayName: Scalars['String'],
   username: Scalars['String'],
   about: About,
 };
@@ -156,12 +163,13 @@ export type ResolversParentTypes = ResolversObject<{
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  userById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByIdArgs, 'id'>>,
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   __resolveReference?: ReferenceResolver<Maybe<ResolversTypes['User']>, { __typename: 'User' } & Pick<ParentType, 'id'>, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   about?: Resolver<ResolversTypes['About'], ParentType, ContextType>,
 }>;
