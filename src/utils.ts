@@ -1,12 +1,13 @@
-const promisify = (foo: any): Promise<any> =>
-  new Promise((resolve, reject) => {
-    foo((error: any, result: any) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+import { User } from 'schemaTypes';
 
-export { promisify };
+const firebaseDocToUser = (
+  doc: FirebaseFirestore.DocumentSnapshot,
+  data: FirebaseFirestore.DocumentData
+): User => ({
+  id: doc.id,
+  about: data.about ?? {},
+  username: data.username,
+  displayName: data.displayName
+});
+
+export { firebaseDocToUser };

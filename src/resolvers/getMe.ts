@@ -1,38 +1,26 @@
-import { promisify } from 'utils';
 import { Maybe, User } from 'schemaTypes';
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { firebaseDocToUser } from 'utils';
 
 const getMe = async (
   root: any,
   args: {},
   context: AppGraphQLContext
 ): Promise<Maybe<User>> => {
-  const user: Maybe<User> = await promisify((callback: any) => {
-    const params: DocumentClient.QueryInput = {
-      TableName: 'HubworldAccounts',
-      KeyConditionExpression: 'id = :v1',
-      ExpressionAttributeValues: {
-        ':v1': context.userID
-      }
-    };
-    context.docClient.query(params, callback);
-  }).then((result: any) => {
-    const accountResult: AccountDBType = result.Items?.[0];
+  const { userID, firestoreClient } = context;
 
-    if (!accountResult) return null;
+  const doc = await firestoreClient
+    .collection('users')
+    .doc(userID)
+    .get();
 
-    const user: User = {
-      id: accountResult.id,
-      about: {
-        description: accountResult.description,
-        socialAccounts: accountResult.socialAccounts
-      },
-      displayName: accountResult.displayName ?? accountResult.username,
-      username: accountResult.username
-    };
+  if (!doc.exists) return null;
 
-    return user;
-  });
+  const data = doc.data();
+
+  if (!data) return null;
+
+  const user = firebaseDocToUser(doc, data);
+
   return user;
 };
 

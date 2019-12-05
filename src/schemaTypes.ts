@@ -18,8 +18,8 @@ export type Scalars = {
 
 export type About = {
    __typename?: 'About',
-  description: Scalars['String'],
-  socialAccounts: Array<SocialLink>,
+  description?: Maybe<Scalars['String']>,
+  socialAccounts?: Maybe<Array<SocialLink>>,
 };
 
 export enum LinkType {
@@ -40,11 +40,17 @@ export type Query = {
    __typename?: 'Query',
   me?: Maybe<User>,
   userById?: Maybe<User>,
+  usersBySearch?: Maybe<Array<User>>,
 };
 
 
 export type QueryUserByIdArgs = {
   id: Scalars['ID']
+};
+
+
+export type QueryUsersBySearchArgs = {
+  search: Scalars['String']
 };
 
 export type SocialLink = {
@@ -164,6 +170,7 @@ export type ResolversParentTypes = ResolversObject<{
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
   userById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByIdArgs, 'id'>>,
+  usersBySearch?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryUsersBySearchArgs, 'search'>>,
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
@@ -175,8 +182,8 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 }>;
 
 export type AboutResolvers<ContextType = any, ParentType extends ResolversParentTypes['About'] = ResolversParentTypes['About']> = ResolversObject<{
-  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  socialAccounts?: Resolver<Array<ResolversTypes['SocialLink']>, ParentType, ContextType>,
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  socialAccounts?: Resolver<Maybe<Array<ResolversTypes['SocialLink']>>, ParentType, ContextType>,
 }>;
 
 export type SocialLinkResolvers<ContextType = any, ParentType extends ResolversParentTypes['SocialLink'] = ResolversParentTypes['SocialLink']> = ResolversObject<{
