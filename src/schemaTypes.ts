@@ -22,6 +22,20 @@ export type About = {
   socialAccounts?: Maybe<Array<SocialLink>>,
 };
 
+export type AboutInput = {
+  description?: Maybe<Scalars['String']>,
+  socialAccounts?: Maybe<Array<SocialAccountInput>>,
+};
+
+export type CreateUserInput = {
+  user: UserInput,
+};
+
+export type CreateUserPayload = {
+   __typename?: 'CreateUserPayload',
+  user?: Maybe<User>,
+};
+
 export enum LinkType {
   Twitch = 'TWITCH',
   Mixer = 'MIXER',
@@ -35,6 +49,16 @@ export enum LinkType {
   Riot = 'RIOT',
   Plain = 'PLAIN'
 }
+
+export type Mutation = {
+   __typename?: 'Mutation',
+  createUser?: Maybe<CreateUserPayload>,
+};
+
+
+export type MutationCreateUserArgs = {
+  input: CreateUserInput
+};
 
 export type Query = {
    __typename?: 'Query',
@@ -53,6 +77,12 @@ export type QueryUsersBySearchArgs = {
   search: Scalars['String']
 };
 
+export type SocialAccountInput = {
+  type: LinkType,
+  url: Scalars['String'],
+  name: Scalars['String'],
+};
+
 export type SocialLink = {
    __typename?: 'SocialLink',
   type: LinkType,
@@ -66,6 +96,12 @@ export type User = {
   displayName: Scalars['String'],
   username: Scalars['String'],
   about: About,
+};
+
+export type UserInput = {
+  displayName: Scalars['String'],
+  username: Scalars['String'],
+  about?: Maybe<AboutInput>,
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -152,6 +188,12 @@ export type ResolversTypes = ResolversObject<{
   About: ResolverTypeWrapper<About>,
   SocialLink: ResolverTypeWrapper<SocialLink>,
   LinkType: LinkType,
+  Mutation: ResolverTypeWrapper<{}>,
+  CreateUserInput: CreateUserInput,
+  UserInput: UserInput,
+  AboutInput: AboutInput,
+  SocialAccountInput: SocialAccountInput,
+  CreateUserPayload: ResolverTypeWrapper<CreateUserPayload>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
 }>;
 
@@ -164,6 +206,12 @@ export type ResolversParentTypes = ResolversObject<{
   About: About,
   SocialLink: SocialLink,
   LinkType: LinkType,
+  Mutation: {},
+  CreateUserInput: CreateUserInput,
+  UserInput: UserInput,
+  AboutInput: AboutInput,
+  SocialAccountInput: SocialAccountInput,
+  CreateUserPayload: CreateUserPayload,
   Boolean: Scalars['Boolean'],
 }>;
 
@@ -192,11 +240,21 @@ export type SocialLinkResolvers<ContextType = any, ParentType extends ResolversP
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 }>;
 
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  createUser?: Resolver<Maybe<ResolversTypes['CreateUserPayload']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>,
+}>;
+
+export type CreateUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateUserPayload'] = ResolversParentTypes['CreateUserPayload']> = ResolversObject<{
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+}>;
+
 export type Resolvers<ContextType = any> = ResolversObject<{
   Query?: QueryResolvers<ContextType>,
   User?: UserResolvers<ContextType>,
   About?: AboutResolvers<ContextType>,
   SocialLink?: SocialLinkResolvers<ContextType>,
+  Mutation?: MutationResolvers<ContextType>,
+  CreateUserPayload?: CreateUserPayloadResolvers<ContextType>,
 }>;
 
 

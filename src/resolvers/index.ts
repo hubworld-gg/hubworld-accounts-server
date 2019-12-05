@@ -4,6 +4,7 @@ import getMe from './getMe';
 import getUserById from './getUserById';
 import getUserReference from './getUserReference';
 import getUsersBySearch from './getUsersBySearch';
+import createUser from './createUser';
 
 const resolvers: Resolvers = {
   Query: {
@@ -16,6 +17,9 @@ const resolvers: Resolvers = {
   User: {
     __resolveReference: (userReference, context: AppGraphQLContext) =>
       getUserReference(userReference, context)
+  },
+  Mutation: {
+    createUser: (root, args, context) => createUser(root, args, context)
   }
 };
 
