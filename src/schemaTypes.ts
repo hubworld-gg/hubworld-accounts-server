@@ -105,6 +105,7 @@ export type User = {
 };
 
 export type UserInput = {
+  id?: Maybe<Scalars['ID']>,
   displayName: Scalars['String'],
   username: Scalars['String'],
   about?: Maybe<AboutInput>,

@@ -46,6 +46,7 @@ input CreateUserInput {
 }
 
 input UserInput {
+  id: ID
   displayName: String!
   username: String!
   about: AboutInput

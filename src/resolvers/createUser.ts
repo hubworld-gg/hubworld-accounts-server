@@ -10,15 +10,27 @@ const createUser = async (
   const { user } = args.input;
   const { firestoreClient } = context;
 
-  const addUserRef = await firestoreClient.collection('users').add({
+  const userInput = {
     username: user.username,
     displayName: user.displayName,
     about: user.about ?? null,
     _username: attributeToSearchableText(user.username),
     _displayName: attributeToSearchableText(user.displayName)
-  });
+  };
 
-  const createdUser = await getUserById({}, { id: addUserRef.id }, context);
+  const usersCollection = firestoreClient.collection('users');
+
+  let id = user.id ?? '';
+  // create from auth0 id
+  if (user.id) {
+    await usersCollection.doc(user.id).set(userInput);
+  } else {
+    // create user with autoid (testing)
+    const addUserRef = await firestoreClient.collection('users').add(userInput);
+    id = addUserRef.id;
+  }
+
+  const createdUser = await getUserById({}, { id }, context);
 
   if (!createdUser) return { user: null };
 
