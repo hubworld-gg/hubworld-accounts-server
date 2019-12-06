@@ -1,6 +1,7 @@
 extend type Query {
   me: User
   userById(id: ID!): User
+  userByEmail(email: String!): User
   usersBySearch(search: String!): [User!]
   userByUsername(username: String!): User
 }
@@ -9,6 +10,7 @@ type User @key(fields: "id") {
   id: ID!
   displayName: String!
   username: String!
+  email: String!
   about: About!
 }
 
@@ -49,6 +51,7 @@ input UserInput {
   id: ID
   displayName: String!
   username: String!
+  email: String!
   about: AboutInput
 }
 

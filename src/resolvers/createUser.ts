@@ -13,6 +13,7 @@ const createUser = async (
   const userInput = {
     username: user.username,
     displayName: user.displayName,
+    email: user.email,
     about: user.about ?? null,
     _username: attributeToSearchableText(user.username),
     _displayName: attributeToSearchableText(user.displayName)

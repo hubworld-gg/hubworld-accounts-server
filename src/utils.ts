@@ -7,7 +7,8 @@ const firebaseDocToUser = (
   id: doc.id,
   about: data.about ?? {},
   username: data.username,
-  displayName: data.displayName
+  displayName: data.displayName,
+  email: data.email
 });
 
 const attributeToSearchableText = (attribute: string) => {

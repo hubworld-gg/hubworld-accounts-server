@@ -64,6 +64,7 @@ export type Query = {
    __typename?: 'Query',
   me?: Maybe<User>,
   userById?: Maybe<User>,
+  userByEmail?: Maybe<User>,
   usersBySearch?: Maybe<Array<User>>,
   userByUsername?: Maybe<User>,
 };
@@ -71,6 +72,11 @@ export type Query = {
 
 export type QueryUserByIdArgs = {
   id: Scalars['ID']
+};
+
+
+export type QueryUserByEmailArgs = {
+  email: Scalars['String']
 };
 
 
@@ -101,6 +107,7 @@ export type User = {
   id: Scalars['ID'],
   displayName: Scalars['String'],
   username: Scalars['String'],
+  email: Scalars['String'],
   about: About,
 };
 
@@ -108,6 +115,7 @@ export type UserInput = {
   id?: Maybe<Scalars['ID']>,
   displayName: Scalars['String'],
   username: Scalars['String'],
+  email: Scalars['String'],
   about?: Maybe<AboutInput>,
 };
 
@@ -225,6 +233,7 @@ export type ResolversParentTypes = ResolversObject<{
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
   userById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByIdArgs, 'id'>>,
+  userByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByEmailArgs, 'email'>>,
   usersBySearch?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryUsersBySearchArgs, 'search'>>,
   userByUsername?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByUsernameArgs, 'username'>>,
 }>;
@@ -234,6 +243,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   about?: Resolver<ResolversTypes['About'], ParentType, ContextType>,
 }>;
 

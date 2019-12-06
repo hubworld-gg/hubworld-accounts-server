@@ -6,12 +6,15 @@ import getUserById from './getUserById';
 import getUserReference from './getUserReference';
 import getUsersBySearch from './getUsersBySearch';
 import getUserByUsername from './getUserByUsername';
+import getUserByEmail from './getUserByEmail';
 
 const resolvers: Resolvers = {
   Query: {
     me: (root, args, context: AppGraphQLContext) => getMe(root, args, context),
     userById: (root, args, context: AppGraphQLContext) =>
       getUserById(root, args, context),
+    userByEmail: (root, args, context: AppGraphQLContext) =>
+      getUserByEmail(root, args, context),
     userByUsername: (root, args, context: AppGraphQLContext) =>
       getUserByUsername(root, args, context),
     usersBySearch: (root, args, context: AppGraphQLContext) =>
