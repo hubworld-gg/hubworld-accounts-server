@@ -1,5 +1,5 @@
 import { Maybe, User, QueryUsersBySearchArgs } from 'schemaTypes';
-import { firebaseDocToUser } from 'utils';
+import { firebaseDocToUser, getStartsWithCodes } from 'utils';
 
 const getUsersBySearch = async (
   root: any,
@@ -9,14 +9,18 @@ const getUsersBySearch = async (
   const { firestoreClient } = context;
   const { search } = args;
 
+  const { startcode, endcode } = getStartsWithCodes(search.toLowerCase());
+
   const usernameQuery = await firestoreClient
     .collection('users')
-    .where('username', '==', search)
+    .where('_username', '>=', startcode)
+    .where('_username', '<', endcode)
     .get();
 
   const displayNameQuery = await firestoreClient
     .collection('users')
-    .where('displayName', '==', search)
+    .where('_displayName', '>=', startcode)
+    .where('_displayName', '<', endcode)
     .get();
 
   if (usernameQuery.empty && displayNameQuery.empty) return null;
@@ -36,7 +40,11 @@ const getUsersBySearch = async (
     return user;
   });
 
-  return [...usernameUsers, ...displayNameUsers];
+  const userList = [...usernameUsers, ...displayNameUsers].filter(
+    (user, index, self) => index === self.findIndex(u => u.id === user.id)
+  );
+
+  return userList;
 };
 
 export default getUsersBySearch;
