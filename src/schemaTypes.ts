@@ -65,6 +65,7 @@ export type Query = {
   me?: Maybe<User>,
   userById?: Maybe<User>,
   usersBySearch?: Maybe<Array<User>>,
+  userByUsername?: Maybe<User>,
 };
 
 
@@ -75,6 +76,11 @@ export type QueryUserByIdArgs = {
 
 export type QueryUsersBySearchArgs = {
   search: Scalars['String']
+};
+
+
+export type QueryUserByUsernameArgs = {
+  username: Scalars['String']
 };
 
 export type SocialAccountInput = {
@@ -219,6 +225,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
   userById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByIdArgs, 'id'>>,
   usersBySearch?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryUsersBySearchArgs, 'search'>>,
+  userByUsername?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByUsernameArgs, 'username'>>,
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{

@@ -2,6 +2,7 @@ extend type Query {
   me: User
   userById(id: ID!): User
   usersBySearch(search: String!): [User!]
+  userByUsername(username: String!): User
 }
 
 type User @key(fields: "id") {
